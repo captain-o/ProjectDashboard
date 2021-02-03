@@ -33,9 +33,9 @@ server = app.server
 #barchart of unemployment and reduced working hours in Germany and France
 
 kurzarbeitDE = pd.read_csv("data/kurzarbeitDE.CSV", sep=";", encoding = "ISO-8859-1")
-arbeitslosigkeitFR = pd.read_csv("data/unemplyomentFrance_rel.csv", sep=";", encoding = "ISO-8859-1")
-#arbeitslosigkeitDE = pd.read_csv("data/ArbeitslosenzahlenDE.csv", sep=";", encoding = "ISO-8859-1")
-arbeitslosigkeitDE = arbeitslosigkeitFR
+arbeitslosigkeit_FR = pd.read_csv("data/unemplyomentFrance_rel.csv", sep=",", encoding = "ISO-8859-1")
+arbeitslosigkeit_DE = pd.read_csv("data/ArbeitslosenzahlenDE.csv", sep=";", encoding = "ISO-8859-1")
+#arbeitslosigkeit_DE = arbeitslosigkeit_FR
 #kurzarbeitFR =
 
 #plot unemployment and corona in german unemplStates
@@ -329,14 +329,14 @@ unempBarFig = go.Figure(
     data=[
         go.Bar(
             name="Unemployment France",
-            x=arbeitslosigkeitFR["date"],
-            y=arbeitslosigkeitFR["rel"],
+            x=arbeitslosigkeit_FR["Date"],
+            y=arbeitslosigkeit_FR["rel"],
             offsetgroup=0,
         ),
         go.Bar(
             name="Unemployment Germany",
-            x=arbeitslosigkeitDE["date"],
-            y=arbeitslosigkeitDE["rel"],
+            x=arbeitslosigkeit_DE["Date"],
+            y=arbeitslosigkeit_DE["rel"],
             offsetgroup=1,
         ),
         go.Bar(
@@ -344,7 +344,7 @@ unempBarFig = go.Figure(
             x=kurzarbeitDE["date"],
             y=kurzarbeitDE["rel"],
             offsetgroup=1,
-            base=arbeitslosigkeitDE["rel"],
+            base=arbeitslosigkeit_DE["rel"],
         )
     ],
     layout=go.Layout(
@@ -658,7 +658,12 @@ def daily_graph_gen_Fr(new_df, category, data):
             secondary_y=True,
         )
     elif(data == 'unemp'):
-        df = 'unemp'
+        arbeitslosigkeit_FR_20 = arbeitslosigkeit_FR.iloc[-11:]
+        daily_data.add_trace(
+            go.Scatter(x=arbeitslosigkeit_FR_20['Date'], y=arbeitslosigkeit_FR_20['rel'], name="rel unemployment", line=dict(color='black')),
+            secondary_y=True,
+        )
+
     elif(date == 'cons'):
         df = 'consumption'
 
@@ -667,13 +672,8 @@ def daily_graph_gen_Fr(new_df, category, data):
 
 def daily_graph_gen_De(new_df, category, data):
     daily_data = make_subplots(specs=[[{"secondary_y": True}]])
-    ###########################################################################
-
-
     #cut data after 31.12.2020
     new_df = new_df[:334]
-
-    ###########################################################################
 
     daily_data.add_trace(
         go.Scatter(x=new_df['Date'], y=new_df['coronavirus'], name="Covid-19 daily report", line=dict(color='#f36')),
@@ -699,7 +699,12 @@ def daily_graph_gen_De(new_df, category, data):
             secondary_y=True,
         )
     elif(data == 'unemp'):
-        df = 'unemp'
+        arbeitslosigkeit_DE_20 = arbeitslosigkeit_DE.iloc[-12:]
+        daily_data.add_trace(
+            go.Scatter(x=arbeitslosigkeit_DE_20['Date'], y=arbeitslosigkeit_DE_20['rel'], name="rel unemployment", line=dict(color='black')),
+            secondary_y=True,
+        )
+
     elif(date == 'cons'):
         df = 'consumption'
 
