@@ -43,3 +43,4 @@ xlrd==2.0.1
 xlrd3==1.0.0
 yfinance==0.1.55
 openpyxl==3.0.6
+xlrd==2.0.1 
