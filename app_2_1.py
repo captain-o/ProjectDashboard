@@ -430,7 +430,7 @@ app.layout = html.Div(children=[
                    options=[
                        {'label': 'unemployment', 'value': 'unemp'},
                        {'label': 'business failures', 'value': 'bf'},
-                       {'label': 'foundation of enterprises', 'value': 'fe'}
+                       {'label': 'business birth', 'value': 'fe'}
                            ],
                        value='unemp',
                        labelStyle={'display': 'inline-block'}
@@ -456,7 +456,7 @@ app.layout = html.Div(children=[
                    options=[
                        {'label': 'unemployment', 'value': 'unemp'},
                        {'label': 'business failures', 'value': 'bf'},
-                       {'label': 'foundation of enterprises', 'value': 'fe'}
+                       {'label': 'business birth', 'value': 'fe'}
                            ],
                        value='unemp',
                        labelStyle={'display': 'inline-block'}
@@ -468,21 +468,18 @@ app.layout = html.Div(children=[
     ]),
 
     # global map
-    html.Div(children = [global_map_heading,
-        dcc.Graph(
-            id='global_graph',
-            figure=map_fig
-        )
-    ]),
+    #html.Div(children = [global_map_heading,
+    #    dcc.Graph(
+    #        id='global_graph',
+    #        figure=map_fig
+    #    )
+    #]),
 
 
 
 
 
-    dcc.Graph(
-        id='unempGerFra',
-        figure=unempBarFig
-    )
+
 ], style={'marginBottom': 50, 'marginTop': 25, 'marginLeft': 20, 'marginRight' :20})
 
 
