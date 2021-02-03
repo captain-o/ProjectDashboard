@@ -34,7 +34,7 @@ server = app.server
 
 kurzarbeitDE = pd.read_csv("data/kurzarbeitDE.CSV", sep=";", encoding = "ISO-8859-1")
 arbeitslosigkeit_FR = pd.read_csv("data/unemplyomentFrance_rel.csv", sep=",", encoding = "ISO-8859-1")
-arbeitslosigkeit_DE = pd.read_csv("data/ArbeitslosenzahlenDE.csv", sep=";", encoding = "ISO-8859-1")
+arbeitslosigkeit_DE = pd.read_csv("data/unemployment_Ger_rel.csv", sep=";", encoding = "ISO-8859-1")
 #arbeitslosigkeit_DE = arbeitslosigkeit_FR
 #kurzarbeitFR =
 
