@@ -65,6 +65,10 @@ stock_DE = pd.read_csv("data/Stock_De.csv", sep=";")
 hc_DE = pd.read_csv("data/Monthly_Household_consumption_DE.csv", sep=",", encoding = "ISO-8859-1")
 hc_FR = pd.read_csv("data/Monthly_Household_consumption_FR.csv", sep=",", encoding = "ISO-8859-1")
 
+#business birts per stateDe
+bb_FR = pd.read_csv("data/BusinessBirths_Regionin_FR.csv", sep=",", encoding = "ISO-8859-1")
+bb_DE = pd.read_csv("data/UnternehmengruendungenBundesland_DE.csv", sep=",", encoding = "ISO-8859-1")
+
 
 #measuresFrance
 measuresFrance = pd.read_csv("data/measuresFreance_test.CSV", sep=";", encoding = "ISO-8859-1")
@@ -523,7 +527,12 @@ def display_corona_cases(feature, value):
                 go.Scatter(x=selectedStateBF["date"], y= selectedStateBF['SumOfBankrupcies'], name="business failures"),
                 secondary_y=True,
             )
-
+        elif (value == "fe"):
+            selectedStateFE = bb_DE[bb_DE["Bundesland"]==curState]
+            fig_region_DE.add_trace(
+                go.Scatter(x=selectedStateFE["Date"], y= selectedStateFE['NumberofCompanyBirths'], name="business birts"),
+                secondary_y=True,
+            )
 
 
         fig_region_DE.update_xaxes(title_text="Corona and Unemployment in " + curState)
