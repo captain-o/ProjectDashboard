@@ -26,7 +26,7 @@ import datetime
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
-
+server = app.server
 
 ##########import Datasets##############
 #barchart of unemployment and reduced working hours in Germany and France
