@@ -106,7 +106,7 @@ recovered_df=transfromDateFormat(recovered_df)
 
 
 ### CREATE THE DATASET FOR GDP FOR FR AND GR
-df_GDP= pd.read_excel('GDP_nouveau.xlsx')
+df_GDP= pd.read_excel('GDP_nouveau.xlsx', encoding = "ISO-8859-1")
 #print(df_GDP.head())
 df_GDP=df_GDP.loc[df_GDP['GEO (Labels)'].isin(['France', 'Germany'])]
 #print(df_GDP.head())
