@@ -30,37 +30,37 @@ server = app.server
 
 ##########import Datasets##############
 #barchart of unemployment and reduced working hours in Germany and France
-arbeitslosigkeitDE = pd.read_csv("data/ArbeitslosenzahelnDE.csv", sep=";", encoding = "ISO-8859-1")
-kurzarbeitDE = pd.read_csv("data/kurzarbeitDE.CSV", sep=";", encoding = "ISO-8859-1")
-arbeitslosigkeitFR = pd.read_csv("data/unemplyomentFrance_rel.csv", sep=";", encoding = "ISO-8859-1")
+arbeitslosigkeitDE = pd.read_csv("ArbeitslosenzahelnDE.csv", sep=";", encoding = "ISO-8859-1")
+kurzarbeitDE = pd.read_csv("kurzarbeitDE.CSV", sep=";", encoding = "ISO-8859-1")
+arbeitslosigkeitFR = pd.read_csv("unemplyomentFrance_rel.csv", sep=";", encoding = "ISO-8859-1")
 #kurzarbeitFR =
 
 #plot unemployment and corona in german unemplStates
-corona_Ger_state_d = pd.read_csv("data/CoronaCasesPerBL_Weekly.csv", sep=",", encoding = "ISO-8859-1")
-unemp_Ger_state_m = pd.read_csv("data/unempGerStates_monthly.CSV", sep=";", encoding = "ISO-8859-1")
+corona_Ger_state_d = pd.read_csv("CoronaCasesPerBL_Weekly.csv", sep=",", encoding = "ISO-8859-1")
+unemp_Ger_state_m = pd.read_csv("unempGerStates_monthly.CSV", sep=";", encoding = "ISO-8859-1")
 #print(corona_Ger_state_d.head())
 #print(unemp_Ger_state_m.head())
 
 #plot unemployment and corona in french regions
-corona_fr_dep_d = pd.read_csv("data/CoronaCasesParRegion_Weekly.csv", sep=",", encoding = "ISO-8859-1")
+corona_fr_dep_d = pd.read_csv("CoronaCasesParRegion_Weekly.csv", sep=",", encoding = "ISO-8859-1")
 #print(corona_fr_dep_d.head())
-unemp_Fr_state_q = pd.read_csv("data/UnemploymentRegionFR_quarterly.csv", sep=";", encoding = "ISO-8859-1")
+unemp_Fr_state_q = pd.read_csv("UnemploymentRegionFR_quarterly.csv", sep=";", encoding = "ISO-8859-1")
 unemp_Fr_state_q = unemp_Fr_state_q.drop(unemp_Fr_state_q.index[:-8])
 #print(unemp_Fr_state_q.head())
 
 #business failures
-businessFail_FR = pd.read_csv("data/BusinessFailuresRegion_FR.csv", sep=";")
+businessFail_FR = pd.read_csv("BusinessFailuresRegion_FR.csv", sep=";")
 businessFail_FR = businessFail_FR.drop(businessFail_FR.index[:-24])
-businessFail_DE = pd.read_csv("data/BusinessFailureLaender_DE.csv", sep=",")
+businessFail_DE = pd.read_csv("BusinessFailureLaender_DE.csv", sep=",")
 print(businessFail_DE)
 
 #stock Market
-stock_FR = pd.read_csv("data/Stock_Fr.csv", sep=";")
-stock_DE = pd.read_csv("data/Stock_De.csv", sep=";")
+stock_FR = pd.read_csv("Stock_Fr.csv", sep=";")
+stock_DE = pd.read_csv("Stock_De.csv", sep=";")
 
 
 #measuresFrance
-measuresFrance = pd.read_csv("data/measuresFreance_test.CSV", sep=";", encoding = "ISO-8859-1")
+measuresFrance = pd.read_csv("measuresFreance_test.CSV", sep=";", encoding = "ISO-8859-1")
 
 
 def transfromDateFormat(df_us):
@@ -105,7 +105,7 @@ recovered_df=transfromDateFormat(recovered_df)
 
 
 ### CREATE THE DATASET FOR GDP FOR FR AND GR
-df_GDP= pd.read_excel('data/GDP_nouveau.xlsx')
+df_GDP= pd.read_excel('GDP_nouveau.xlsx')
 #print(df_GDP.head())
 df_GDP=df_GDP.loc[df_GDP['GEO (Labels)'].isin(['France', 'Germany'])]
 #print(df_GDP.head())
