@@ -593,6 +593,12 @@ def capital_click(feature, value):
                 go.Scatter(x=data["date"], y= data[curState], name="business failues"),
                 secondary_y=True,
             )
+        elif (value == "fe"):
+            selectedStateFE = bb_FR.iloc[:4]
+            fig_coronaRegionFR.add_trace(
+                go.Scatter(x=selectedStateFE["Date"], y= selectedStateFE[curState], name="business birts"),
+                secondary_y=True,
+            )
             '''
         fig_coronaRegionFR['layout'].update(annotations=[dict(
                                             x="2020-08-30",  # annotation point
