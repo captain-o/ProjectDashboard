@@ -61,6 +61,11 @@ businessFail_DE = pd.read_csv("data/BusinessFailureLaender_DE.csv", sep=",", enc
 stock_FR = pd.read_csv("data/Stock_Fr.csv", sep=";")
 stock_DE = pd.read_csv("data/Stock_De.csv", sep=";")
 
+#household consumption
+hc_DE = pd.read_csv("data/Monthly_Household_consumption_DE.csv", sep=",", encoding = "ISO-8859-1")
+hc_FR = pd.read_csv("data/Monthly_Household_consumption_FR.csv", sep=",", encoding = "ISO-8859-1")
+
+
 #measuresFrance
 measuresFrance = pd.read_csv("data/measuresFreance_test.CSV", sep=";", encoding = "ISO-8859-1")
 
@@ -666,8 +671,15 @@ def daily_graph_gen_Fr(new_df, category, data):
             secondary_y=True,
         )
 
-    elif(date == 'cons'):
-        df = 'consumption'
+    elif(data == 'cons'):
+        hc_FR_20 = hc_FR.iloc[-10:]
+        daily_data.add_trace(
+            go.Scatter(x=hc_FR_20['Date'], y=hc_FR_20['TotalConsumption'], name="consumption", line=dict(color='black')),
+            secondary_y=True,
+        )
+
+
+
 
 
     return daily_data
@@ -707,8 +719,12 @@ def daily_graph_gen_De(new_df, category, data):
             secondary_y=True,
         )
 
-    elif(date == 'cons'):
-        df = 'consumption'
+    elif(data == 'cons'):
+        hc_DE_20 = hc_DE.iloc[-3:]
+        daily_data.add_trace(
+            go.Scatter(x=hc_DE_20['Date'], y=hc_DE_20['VerbraucherAusgaben'], name="consumption", line=dict(color='black')),
+            secondary_y=True,
+        )
 
     return daily_data
 
