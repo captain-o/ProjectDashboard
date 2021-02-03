@@ -23,8 +23,7 @@ import dash_bootstrap_components as dbc
 from datetime import datetime
 from scipy.interpolate import interp1d
 import datetime
-import xlrd
-import openpyxl
+
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
