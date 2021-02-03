@@ -237,7 +237,7 @@ country_dropdown_Fr = dbc.Container(
         dbc.Row(
             [
                 dbc.Col(children = [
-                    html.Label('Select Country'),
+                    html.Label('Select Feature'),
                     html.Div(
                         dcc.Dropdown(
                             id = 'select-data-Fr',
@@ -248,7 +248,7 @@ country_dropdown_Fr = dbc.Container(
                                 {'label': 'consumption', 'value': 'cons'}
                             ],
                             value='gdp'
-                        )
+                        ),
                     )
                 ],width=3, className='p-2 mr-2'),
 
@@ -261,22 +261,22 @@ country_dropdown_Fr = dbc.Container(
                                         ,className='p-0'), className='mt-3')],
                         width=3, className='p-2 mx-2'),
 
-                dbc.Col(children = [html.Label('Select category', style = {'padding-top': '0px'}),
+                dbc.Col(children = [html.Label('Select Corona Indicator', style = {'padding-top': '0px'}),
                         html.Div(dcc.Dropdown(id = 'select-category-Fr', options = my_df_type_list, value='Confirmed cases'))],
                         width=3, className='p-2 ml-2'),
             ]
         , className='my-4 justify-content-center'),
 
-    ]
+    ], style={'margin':'0px', 'height': '80px', 'padding':'0px'}
 )
 
 # dropdown to select country for Germany
-country_dropdown_De = dbc.Container(
+country_dropdown_De =dbc.Container(
     [
-        dbc.Row(
+    dbc.Row(
             [
                 dbc.Col(children = [
-                    html.Label('Select Country'),
+                    html.Label('Select Feature'),
                     html.Div(
                         dcc.Dropdown(
                             id = 'select-data-De',
@@ -287,7 +287,7 @@ country_dropdown_De = dbc.Container(
                                 {'label': 'consumption', 'value': 'cons'}
                             ],
                             value='gdp'
-                        )
+                        ), style={'margin': "0px", "padding": "0px"}
                     )
                 ],width=3, className='p-2 mr-2'),
 
@@ -300,14 +300,14 @@ country_dropdown_De = dbc.Container(
                                         ,className='p-0'), className='mt-3')],
                         width=3, className='p-2 mx-2'),
 
-                dbc.Col(children = [html.Label('Select category', style = {'padding-top': '0px'}),
+                dbc.Col(children = [html.Label('Select Corona Indicator', style = {'padding-top': '0px'}),
                         html.Div(dcc.Dropdown(id = 'select-category-De', options = my_df_type_list, value='Confirmed cases'))],
                         width=3, className='p-2 ml-2'),
             ]
-        , className='my-4 justify-content-center'),
-
-    ]
+        , className='my-4 justify-content-center')
+], style={'margin':'0px', 'height': '80px', 'padding':'0px'}
 )
+
 
 
 
@@ -375,26 +375,27 @@ app.layout = html.Div(children=[
             dbc.Col([
                 # daily report graph
                 dbc.Container([
-                    daily_graph_heading_Fr,
+                    #FDatedaily_graph_heading_Fr,
                     country_dropdown_Fr,
                     html.Div(id='country-total'),
-                    ##########
-                    dcc.Graph(id='daily-graphs-Fr' )
+                    ##########, style={'margin': "0px", "padding": "0px"}
+                    dcc.Graph(id='daily-graphs-Fr')
                 ])
-            ], width=6),
+                #, style={"height": '40vh'}
+            ], width=6, style={'display': 'inline-block'}),
             dbc.Col([
                 # daily report graph
-                dbc.Container([
-                    daily_graph_heading_De,
+
+                    #daily_graph_heading_De,
                     country_dropdown_De,
-                    html.Div(id='country-total-De'),
+                    html.Div(id='country-total-De', style={'margin':'0px'}),
                     ##########
-                    dcc.Graph(id='daily-graphs-De' )
-                ])
-            ], width=6)
+                    dcc.Graph(id='daily-graphs-De')
+
+            ], width=6, style={'display': 'inline-block', 'margin':'0px'})
 
 
-        ])
+        ],style={ 'margin':'0px'})
 
 
     ]),
@@ -426,7 +427,7 @@ app.layout = html.Div(children=[
                        labelStyle={'display': 'inline-block'}
                ),
                dcc.Graph(id="coronaRegionFR",style={'width': '90%'})
-           ], width=4, style={'display': 'inline-block', "border":"2px black solid"}),
+           ], width=4, style={'display': 'inline-block'}),
 
            dbc.Col(children=[
 
@@ -453,9 +454,9 @@ app.layout = html.Div(children=[
                ),
                dcc.Graph(id="coronaRegionDE", style={'width': '90%'})
 
-           ], width=4, style={'display': 'inline-block', "border":"2px black solid"})
+           ], width=4, style={'display': 'inline-block'})
        ], align='center')
-    ], style={"border":"2px black solid"}),
+    ]),
 
     # global map
     html.Div(children = [global_map_heading,
@@ -528,7 +529,8 @@ def display_corona_cases(feature, value):
         fig_region_DE.update_yaxes(
             title_text="Corona cases per day",
             secondary_y=False)
-        fig_region_DE.update_layout(title_text=curState)
+        fig_region_DE.update_layout(title_text=curState, height = 350)
+
         return fig_region_DE
     else:
         curState ="Bayern"
@@ -542,7 +544,7 @@ def display_corona_cases(feature, value):
         fig_region_DE.update_yaxes(
             title_text="Corona cases per day",
             secondary_y=False)
-        fig_region_DE.update_layout(title_text=curState)
+        fig_region_DE.update_layout(title_text=curState, height = 350)
         return fig_region_DE
 
 
@@ -599,7 +601,7 @@ def capital_click(feature, value):
         fig_coronaRegionFR.update_yaxes(
             title_text="Corona cases per day",
             secondary_y=False)
-        fig_coronaRegionFR.update_layout(title_text=curState)
+        fig_coronaRegionFR.update_layout(title_text=curState, height = 350)
         return fig_coronaRegionFR
     else:
         curState = "Normandie"
@@ -622,7 +624,7 @@ def capital_click(feature, value):
 
 
         fig_coronaRegionFR.update_yaxes(title_text="Corona cases per day", secondary_y=False)
-        fig_coronaRegionFR.update_layout(title_text=curState)
+        fig_coronaRegionFR.update_layout(title_text=curState, height = 350)
         return fig_coronaRegionFR
 
 
@@ -638,9 +640,9 @@ def daily_graph_gen_Fr(new_df, category, data):
         go.Scatter(x=new_df['Date'], y=new_df['coronavirus'], name="Covid-19 daily report", line=dict(color='#f36')),
         secondary_y=False,
     )
-    daily_data.update_layout(height=450,  title = category +'  in ' + new_df['Country'].values[0], )
-    daily_data.update_xaxes(title_text="Date", title='Date', title_font=dict(family='Courier New, monospace', size=24, color='#7f7f7f')
-    )
+    daily_data.update_layout(height=400,  title = category +'  in ' + new_df['Country'].values[0] + ' and ' + data, margin=dict(b=0, t=50) )
+    #daily_data.update_xaxes(title_text="Date", title='Date', title_font=dict(family='Courier New, monospace', size=24, color='#7f7f7f'))
+
 
     if (data == 'gdp'):
         df_data = df_GDP.copy(deep=True)
@@ -667,6 +669,7 @@ def daily_graph_gen_Fr(new_df, category, data):
     elif(date == 'cons'):
         df = 'consumption'
 
+
     return daily_data
 
 
@@ -679,9 +682,8 @@ def daily_graph_gen_De(new_df, category, data):
         go.Scatter(x=new_df['Date'], y=new_df['coronavirus'], name="Covid-19 daily report", line=dict(color='#f36')),
         secondary_y=False,
     )
-    daily_data.update_layout(height=450,  title = category +'  in ' + new_df['Country'].values[0], )
-    daily_data.update_xaxes(title_text="Date", title='Date', title_font=dict(family='Courier New, monospace', size=24, color='#7f7f7f')
-    )
+    daily_data.update_layout(height=400,  title = category +'  in ' + new_df['Country'].values[0] + ' and ' + data, margin=dict(b=0, t=50))
+    #daily_data.update_xaxes(title_text="Date", title='Date', title_font=dict(family='Courier New, monospace', size=24, color='#7f7f7f'))
 
     if (data == 'gdp'):
         df_data = df_GDP.copy(deep=True)
