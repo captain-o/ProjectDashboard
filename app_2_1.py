@@ -23,6 +23,7 @@ import dash_bootstrap_components as dbc
 from datetime import datetime
 from scipy.interpolate import interp1d
 import datetime
+import chardet
 
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
@@ -46,13 +47,19 @@ unemp_Ger_state_m = pd.read_csv("data/unempGerStates_monthly.CSV", sep=";", enco
 
 #plot unemployment and corona in french regions
 corona_fr_dep_d = pd.read_csv("data/CoronaCasesParRegion_Weekly.csv", sep=",", encoding = "ISO-8859-1")
+#with open("data/CoronaCasesParRegion_Weekly.csv", 'rb') as file:
+#    print(chardet.detect(file.read()))
 #print(corona_fr_dep_d.head())
-unemp_Fr_state_q = pd.read_csv("data/UnemploymentRegionFR_quarterly.csv", sep=";", encoding = "ISO-8859-1")
+unemp_Fr_state_q = pd.read_csv("data/UnemploymentRegionFR_quarterly.csv", sep=";", encoding='utf-8')
+#with open("data/UnemploymentRegionFR_quarterly.csv", 'rb') as file:
+#    print(chardet.detect(file.read()))
 unemp_Fr_state_q = unemp_Fr_state_q.drop(unemp_Fr_state_q.index[:-8])
 #print(unemp_Fr_state_q.head())
 
 #business failures
-businessFail_FR = pd.read_csv("data/BusinessFailuresRegion_FR.csv", sep=";", encoding = "ISO-8859-1")
+businessFail_FR = pd.read_csv("data/BusinessFailuresRegion_FR.csv", sep=";", encoding = "utf-8")
+#with open("data/BusinessFailuresRegion_FR.csv", 'rb') as file:
+#    print(chardet.detect(file.read()))
 businessFail_FR = businessFail_FR.drop(businessFail_FR.index[:-24])
 businessFail_DE = pd.read_csv("data/BusinessFailureLaender_DE.csv", sep=",", encoding = "ISO-8859-1")
 #print(businessFail_DE)
@@ -67,7 +74,7 @@ hc_FR = pd.read_csv("data/Monthly_Household_consumption_FR.csv", sep=",", encodi
 
 #business birts per stateDe
 bb_FR = pd.read_csv("data/BusinessBirths_Regionin_FR.csv", sep=",", encoding = "ISO-8859-1")
-bb_DE = pd.read_csv("data/UnternehmengruendungenBundesland_DE.csv", sep=",", encoding = "ISO-8859-1")
+bb_DE = pd.read_csv("data/BusinessBirths_Regionin_DE.csv", sep=",", encoding = "ISO-8859-1")
 
 
 #measuresFrance
@@ -489,14 +496,14 @@ app.layout = html.Div(children=[
 def display_corona_cases(feature, value):
     if feature is not None:
         curState = feature['properties']['name']
-        print(curState)
 
+        curState_raw = curState
         #writeTofile("mapData: " + curState)
         curState = curState.encode().decode('ISO-8859-1')
         #print(curState)
 
         #writeTofile("fixed?: " + fixedFile)
-        selectedStateBF = businessFail_DE[businessFail_DE["Bundesland"]==curState]
+
         selectedStateCorona = corona_Ger_state_d[corona_Ger_state_d["Bundesland"]==curState]
 
 
@@ -515,27 +522,34 @@ def display_corona_cases(feature, value):
                 go.Scatter(x=data["date"], y= data[curState], name="unemp Data"),
                 secondary_y=True,
             )
+            fig_region_DE.update_yaxes(
+                title_text="unemployment in percent",
+                secondary_y=True)
         elif (value == "bf"):
-            print(curState)
+            
+            selectedStateBF = businessFail_DE[businessFail_DE["Bundesland"]==curState_raw]
 
-            #print(selectedStateBF.head())
             selectedStateBF = selectedStateBF.drop(selectedStateBF.index[:-24])
             fig_region_DE.add_trace(
                 go.Scatter(x=selectedStateBF["date"], y= selectedStateBF['SumOfBankrupcies'], name="business failures"),
                 secondary_y=True,
             )
+            fig_region_DE.update_yaxes(
+                title_text="absolut buseiness failures",
+                secondary_y=True)
         elif (value == "fe"):
-            selectedStateFE = bb_DE[bb_DE["Bundesland"]==curState]
+            selectedStateFE = bb_DE[bb_DE["Bundesland"]==curState_raw]
             fig_region_DE.add_trace(
                 go.Scatter(x=selectedStateFE["Date"], y= selectedStateFE['NumberofCompanyBirths'], name="business birts"),
                 secondary_y=True,
             )
+            fig_region_DE.update_yaxes(
+                title_text="absolut buseiness births",
+                secondary_y=True)
 
 
-        fig_region_DE.update_xaxes(title_text="Corona and Unemployment in " + curState)
-        fig_region_DE.update_yaxes(
-            title_text="unemployment in percent",
-            secondary_y=True)
+        #fig_region_DE.update_xaxes(title_text="Corona and Unemployment in " + "Baden-Würrtemberg")
+
 
         fig_region_DE.update_yaxes(
             title_text="Corona cases per day",
@@ -568,7 +582,10 @@ def capital_click(feature, value):
     if feature is not None:
         curState = feature['properties']['nom']
         print(curState)
-        #print(value)
+        curState_raw = curState
+        #writeTofile("mapData: " + curState)
+        #curState = curState.encode().decode('ISO-8859-1')
+        #print(curState)
         selectedStateCorona = corona_fr_dep_d[corona_fr_dep_d["Region"]==curState]
         '''
         fig_coronaRegionFR = px.line(selectedStateCorona, x = selectedStateCorona["Date"], y =selectedStateCorona["Cases"])
@@ -581,9 +598,11 @@ def capital_click(feature, value):
         )
 
         if (value == "unemp"):
+            print(curState in businessFail_FR.columns)
+            print(curState_raw in businessFail_FR.columns)
             data = unemp_Fr_state_q
             fig_coronaRegionFR.add_trace(
-                go.Scatter(x=data["date"], y= data[curState], name="unemp Data"),
+                go.Scatter(x=data["date"], y= data[curState_raw], name="unemp Data"),
                 secondary_y=True,
             )
         elif (value == "bf"):
