@@ -168,7 +168,7 @@ navbar = dbc.NavbarSimple(
         #dbc.NavItem(html.A("Stock Market", href="#nav-stock-market", style = {'color': '#fff'}), className="mr-3"),
         #dbc.NavItem(html.A("Unemployment of Germany and France", href="#nav-unemp", style = {'color': '#fff'}), className="mr-3")
     ],
-    brand="Impact of Covid19 measures on economy and the pandemic",
+    brand="Impact of Covid-19 measures on the economy of France and Germany",
     brand_href="/",
     color="dark",
     dark=True,
@@ -395,8 +395,8 @@ end = html.Div(children= [
         html.Div([html.Span('1. The data is taken from '), dcc.Link('Johns Hopkins University', href='https://github.com/CSSEGISandData/COVID-19')]),
         html.Div([html.Span('2. Build this Dashboard using '), dcc.Link('Plotly', href='https://plotly.com/python/')]),
         html.Div([html.Span('3. Get the source code from our '), dcc.Link('github repo', href='...')]),
-        html.H5('Note: Will be updating this Dashboard with more features and better visualization.', style = {'margin-top': '20px', 'margin-bottom': '140px'})
-])
+
+], style = {'margin-top': '20px', 'margin-bottom': '140px'})
 
 
 
@@ -417,8 +417,8 @@ app.layout = html.Div(children=[
     world_tally,
     html.Div(
     [
-        dbc.Button("Impact of Covid-19 measures on the economy of France and Germany. Our dashboard shows a different data sets that can be chosen and compared to covid cases. For further information click here.",
-            id="open"),
+        dbc.Button("Our dashboard shows a different data sets that can be chosen and compared to covid cases. For further information click here.",
+            id="open",),
         dbc.Modal(
             [
                 dbc.ModalHeader("About this dashboard"),
@@ -440,9 +440,9 @@ app.layout = html.Div(children=[
                     dbc.Button("Close", id="close", className="ml-auto")
                 ),
             ],
-            id="modal", size="lg",
+            id="modal", size="lg", centered=True,
         ),
-    ]
+    ],  style={'textAlign': 'center'}
     ),
 
 
@@ -515,7 +515,7 @@ app.layout = html.Div(children=[
            ], width=4, style={'display': 'inline-block'})
        ], align='center', className='text-center bg-light p-2', style = {'border-top-right-radius': '6px', 'border-bottom-right-radius': '6px'})
     ]),
-
+    end
     # global map
     #html.Div(children = [global_map_heading,
     #    dcc.Graph(
