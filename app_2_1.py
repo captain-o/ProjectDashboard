@@ -78,7 +78,7 @@ bb_DE = pd.read_csv("data/BusinessBirths_Regionin_DE.csv", sep=",", encoding = "
 
 
 #measuresFrance
-measuresFrance = pd.read_csv("data/measuresFreance_test.CSV", sep=";", encoding = "ISO-8859-1")
+measuresFrance = pd.read_csv("data/measuresFreance.CSV", sep=";", encoding = "ISO-8859-1")
 
 
 def transfromDateFormat(df_us):
@@ -268,14 +268,6 @@ country_dropdown_Fr = dbc.Container(
                     )
                 ],width=3, className='p-2 mr-2'),
 
-                dbc.Col(children = [html.Label('Drage to choose no of Days', style = {'padding-top': '0px'}),
-                        html.Div(dcc.Slider( id = 'select-date-Fr',
-                                            min=10,
-                                            max=len(death_df.columns[3:]),
-                                            step=1,
-                                            value=365
-                                        ,className='p-0'), className='mt-3')],
-                        width=3, className='p-2 mx-2'),
 
                 dbc.Col(children = [html.Label('Select Corona Indicator', style = {'padding-top': '0px'}),
                         html.Div(dcc.Dropdown(id = 'select-category-Fr', options = my_df_type_list, value='Confirmed cases'))],
@@ -307,14 +299,7 @@ country_dropdown_De =dbc.Container(
                     )
                 ],width=3, className='p-2 mr-2'),
 
-                dbc.Col(children = [html.Label('Drage to choose no of Days', style = {'padding-top': '0px'}),
-                        html.Div(dcc.Slider( id = 'select-date-De',
-                                            min=10,
-                                            max=len(death_df.columns[3:]),
-                                            step=1,
-                                            value=365
-                                        ,className='p-0'), className='mt-3')],
-                        width=3, className='p-2 mx-2'),
+
 
                 dbc.Col(children = [html.Label('Select Corona Indicator', style = {'padding-top': '0px'}),
                         html.Div(dcc.Dropdown(id = 'select-category-De', options = my_df_type_list, value='Confirmed cases'))],
@@ -549,7 +534,7 @@ def display_corona_cases(feature, value):
         #fig_corona_state = px.line(selectedStateUnemp, title='Corona cases in ' + stateDe, labels={'week':"Woche"})
         fig_region_DE = make_subplots(specs=[[{"secondary_y": True}]])
         fig_region_DE.add_trace(
-            go.Scatter(x = selectedStateCorona["week"], y =selectedStateCorona["FaelleProWoche"], name="corona cases"),
+            go.Scatter(x = selectedStateCorona["week"], y =selectedStateCorona["FaelleProWoche"], name="corona cases",  line=dict(color='#f36')),
             secondary_y=False,
         )
 
@@ -557,7 +542,7 @@ def display_corona_cases(feature, value):
         if (value == "unemp"):
             data = unemp_Ger_state_m
             fig_region_DE.add_trace(
-                go.Scatter(x=data["date"], y= data[curState], name="unemp Data"),
+                go.Scatter(x=data["date"], y= data[curState], name="unemp Data", line=dict(color='black')),
                 secondary_y=True,
             )
             fig_region_DE.update_yaxes(
@@ -569,7 +554,7 @@ def display_corona_cases(feature, value):
 
             selectedStateBF = selectedStateBF.drop(selectedStateBF.index[:-24])
             fig_region_DE.add_trace(
-                go.Scatter(x=selectedStateBF["date"], y= selectedStateBF['SumOfBankrupcies'], name="business failures"),
+                go.Scatter(x=selectedStateBF["date"], y= selectedStateBF['SumOfBankrupcies'], name="business failures", line=dict(color='black')),
                 secondary_y=True,
             )
             fig_region_DE.update_yaxes(
@@ -578,7 +563,7 @@ def display_corona_cases(feature, value):
         elif (value == "fe"):
             selectedStateFE = bb_DE[bb_DE["Bundesland"]==curState_raw]
             fig_region_DE.add_trace(
-                go.Scatter(x=selectedStateFE["Date"], y= selectedStateFE['NumberofCompanyBirths'], name="business birts"),
+                go.Scatter(x=selectedStateFE["Date"], y= selectedStateFE['NumberofCompanyBirths'], name="business birts", line=dict(color='black')),
                 secondary_y=True,
             )
             fig_region_DE.update_yaxes(
@@ -587,12 +572,18 @@ def display_corona_cases(feature, value):
 
 
         #fig_region_DE.update_xaxes(title_text="Corona and Unemployment in " + "Baden-Würrtemberg")
-
+        fig_region_DE.update_layout(legend=dict(
+            orientation="h",
+            yanchor="bottom",
+            y=1.02,
+            xanchor="right",
+            x=1
+        ))
 
         fig_region_DE.update_yaxes(
             title_text="Corona cases per day",
             secondary_y=False)
-        fig_region_DE.update_layout(title_text=curState, height = 350)
+        fig_region_DE.update_layout(title_text=curState, height =250, margin=dict(b=0, t=25, r=0, l = 0))
 
         return fig_region_DE
     else:
@@ -601,13 +592,13 @@ def display_corona_cases(feature, value):
         #fig_corona_state = px.line(selectedStateUnemp, title='Corona cases in ' + stateDe, labels={'week':"Woche"})
         fig_region_DE = make_subplots(specs=[[{"secondary_y": True}]])
         fig_region_DE.add_trace(
-            go.Scatter(x = selectedStateCorona["week"], y =selectedStateCorona["FaelleProWoche"], name="corona cases"),
+            go.Scatter(x = selectedStateCorona["week"], y =selectedStateCorona["FaelleProWoche"], name="corona cases",  line=dict(color='#f36')),
             secondary_y=False,
         )
         fig_region_DE.update_yaxes(
             title_text="Corona cases per day",
             secondary_y=False)
-        fig_region_DE.update_layout(title_text=curState, height = 350)
+        fig_region_DE.update_layout(title_text=curState, height =250, margin=dict(b=0, t=25, r=0, l = 0))
         return fig_region_DE
 
 
@@ -631,74 +622,72 @@ def capital_click(feature, value):
         #print(corona_fr_dep_d[corona_fr_dep_d["Region"]==curState].head())
         fig_coronaRegionFR = make_subplots(specs=[[{"secondary_y": True}]])
         fig_coronaRegionFR.add_trace(
-            go.Scatter(x = selectedStateCorona["week"], y =selectedStateCorona["PosCasesPerWeek"], name = "Corona cases"),
+            go.Scatter(x = selectedStateCorona["week"], y =selectedStateCorona["PosCasesPerWeek"], name = "Corona cases",  line=dict(color='#f36')),
             secondary_y=False,
         )
 
         if (value == "unemp"):
-            print(curState in businessFail_FR.columns)
-            print(curState_raw in businessFail_FR.columns)
+
             data = unemp_Fr_state_q
             fig_coronaRegionFR.add_trace(
-                go.Scatter(x=data["date"], y= data[curState_raw], name="unemp Data"),
+                go.Scatter(x=data["date"], y= data[curState_raw], name="unemp Data", line=dict(color='black')),
                 secondary_y=True,
             )
         elif (value == "bf"):
             data = businessFail_FR
 
             fig_coronaRegionFR.add_trace(
-                go.Scatter(x=data["date"], y= data[curState], name="business failues"),
+                go.Scatter(x=data["date"], y= data[curState], name="business failues", line=dict(color='black')),
                 secondary_y=True,
             )
         elif (value == "fe"):
             selectedStateFE = bb_FR.iloc[:4]
             fig_coronaRegionFR.add_trace(
-                go.Scatter(x=selectedStateFE["Date"], y= selectedStateFE[curState], name="business birts"),
+                go.Scatter(x=selectedStateFE["Date"], y= selectedStateFE[curState], name="business birts", line=dict(color='black')),
                 secondary_y=True,
             )
-            '''
-        fig_coronaRegionFR['layout'].update(annotations=[dict(
-                                            x="2020-08-30",  # annotation point
-                                            xref='x1',
-                                            yref='y1',
-                                            text='dict Text',
-                                            showarrow=True,
-                                            arrowhead=7,
-                                            ax=10,
-                                            ay=70
-        )])
 
-        fig_coronaRegionFR.add_vline(x="2020-08-30", line_width=3, line_dash="dash", line_color="black", opacity = 0.5)
-        '''
-        #, hovertext = "bla"
-        #, annotation_text="blabla"
+
+        for index, row in measuresFrance.iterrows():
+            date = row['Date']
+            measure = row['Measures']
+            fig_coronaRegionFR.add_trace(go.Scatter(x=[date, date], y=[-1,30000], mode="lines", line_color = "black", opacity=0.1,showlegend=False, hoverinfo = "text", text = measure))
+
+        #fig_coronaRegionFR.update_layout(hovermode='x')
+
+        fig_coronaRegionFR.update_layout(legend=dict(
+            orientation="h",
+            yanchor="bottom",
+            y=1.02,
+            xanchor="right",
+            x=1
+        ))
+        #measuresFrance
+
+
         fig_coronaRegionFR.update_yaxes(
             title_text="Corona cases per day",
             secondary_y=False)
-        fig_coronaRegionFR.update_layout(title_text=curState, height = 350)
+        fig_coronaRegionFR.update_layout(title_text=curState, height =250, margin=dict(b=0, t=25, r=0, l = 0))
+        #, width = 700
         return fig_coronaRegionFR
+
+
     else:
         curState = "Normandie"
         selectedStateCorona = corona_fr_dep_d[corona_fr_dep_d["Region"]==curState]
 
         fig_coronaRegionFR = make_subplots(specs=[[{"secondary_y": True}]])
         fig_coronaRegionFR.add_trace(
-            go.Scatter(x = selectedStateCorona["week"], y =selectedStateCorona["PosCasesPerWeek"], name = "corona cases"),
+            go.Scatter(x = selectedStateCorona["week"], y =selectedStateCorona["PosCasesPerWeek"], name = "corona cases",  line=dict(color='#f36')),
             secondary_y=False,
         )
 
-        for label, content in measuresFrance.iteritems():
-            measures = ""
-            for row in content:
-                measures = measures + str(row) + "<br>"
-            fig_coronaRegionFR.add_trace(go.Scatter(x=[label, label], y=[-1,12000], mode="lines", line_color = "black", opacity=0.1, name="Lockdown", hoverinfo = "text", text = measures + label))
 
-        #measuresFrance
-        fig_coronaRegionFR.update_layout(hovermode='x')
 
 
         fig_coronaRegionFR.update_yaxes(title_text="Corona cases per day", secondary_y=False)
-        fig_coronaRegionFR.update_layout(title_text=curState, height = 350)
+        fig_coronaRegionFR.update_layout(title_text=curState, height =250, margin=dict(b=0, t=25, r=0, l = 0))
         return fig_coronaRegionFR
 
 
@@ -801,11 +790,10 @@ def daily_graph_gen_De(new_df, category, data):
 @app.callback(
      Output('daily-graphs-De', 'figure'),
      [Input('select-data-De', 'value'),
-      Input('select-category-De', 'value'),
-      Input('select-date-De', 'value')]
+      Input('select-category-De', 'value')]
 )
 
-def country_wise(data, df_type, number):
+def country_wise(data, df_type):
     country_name = 'Germany'
     # on select of category copy the dataframe to group by country
     if df_type == 'Confirmed cases':
@@ -850,17 +838,16 @@ def country_wise(data, df_type, number):
 
 
 
-    new_df = new_df.iloc[-number:]
+    #new_df = new_df.iloc[-number:]
     return (daily_graph_gen_De(new_df, category, data))
 
 @app.callback(
      Output('daily-graphs-Fr', 'figure'),
      [Input('select-data-Fr', 'value'),
-      Input('select-category-Fr', 'value'),
-      Input('select-date-Fr', 'value')]
+      Input('select-category-Fr', 'value')]
 )
 
-def country_wise(data, df_type, number):
+def country_wise(data, df_type):
     country_name = 'France'
     # on select of category copy the dataframe to group by country
     if df_type == 'Confirmed cases':
@@ -912,7 +899,7 @@ def country_wise(data, df_type, number):
         if new_df.iloc[i+1, 1] < 0:
             new_df.iloc[i+1, 1] = 0
 
-    new_df = new_df.iloc[-number:]
+    #new_df = new_df.iloc[-number:]
 
 
     return (daily_graph_gen_Fr(new_df, category, data))
