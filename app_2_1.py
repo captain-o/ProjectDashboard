@@ -259,7 +259,7 @@ country_dropdown_Fr = dbc.Container(
                         dcc.Dropdown(
                             id = 'select-data-Fr',
                             options=[
-                                {'label': 'stock market', 'value': 'stock'},
+                                {'label': 'CAC', 'value': 'stock'},
                                 {'label': 'GDP', 'value': 'gdp'},
                                 {'label': 'unemployment', 'value': 'unemp'},
                                 {'label': 'consumption', 'value': 'cons'}
@@ -290,7 +290,7 @@ country_dropdown_De =dbc.Container(
                         dcc.Dropdown(
                             id = 'select-data-De',
                             options=[
-                                {'label': 'stock market', 'value': 'stock'},
+                                {'label': 'DAX', 'value': 'stock'},
                                 {'label': 'GDP', 'value': 'gdp'},
                                 {'label': 'unemployment', 'value': 'unemp'},
                                 {'label': 'consumption', 'value': 'cons'}
@@ -555,7 +555,7 @@ def display_corona_cases(feature, value):
         ))
 
         fig_region_DE.update_yaxes(
-            title_text="Corona cases per day",
+            title_text="Corona cases per week",
             secondary_y=False)
         fig_region_DE.update_layout(title_text=curState, height =250, margin=dict(b=0, t=25, r=0, l = 0))
 
@@ -570,7 +570,7 @@ def display_corona_cases(feature, value):
             secondary_y=False,
         )
         fig_region_DE.update_yaxes(
-            title_text="Corona cases per day",
+            title_text="Corona cases per week",
             secondary_y=False)
         fig_region_DE.update_layout(title_text=curState, height =250, margin=dict(b=0, t=25, r=0, l = 0))
         return fig_region_DE
@@ -636,7 +636,7 @@ def capital_click(feature, value):
 
 
         fig_coronaRegionFR.update_yaxes(
-            title_text="Corona cases per day",
+            title_text="Corona cases per week",
             secondary_y=False)
         fig_coronaRegionFR.update_layout(title_text=curState, height =250, margin=dict(b=0, t=25, r=0, l = 0))
         #, width = 700
@@ -656,7 +656,7 @@ def capital_click(feature, value):
 
 
 
-        fig_coronaRegionFR.update_yaxes(title_text="Corona cases per day", secondary_y=False)
+        fig_coronaRegionFR.update_yaxes(title_text="Corona cases per week", secondary_y=False)
         fig_coronaRegionFR.update_layout(title_text=curState, height =250, margin=dict(b=0, t=25, r=0, l = 0))
         return fig_coronaRegionFR
 
@@ -673,9 +673,9 @@ def daily_graph_gen_Fr(new_df, category, data):
         go.Scatter(x=new_df['Date'], y=new_df['coronavirus'], name="Covid-19 weekly infections", line=dict(color='#f36')),
         secondary_y=False,
     )
-    daily_data.update_layout(height=400,  title = category +'  in France with ' + data, margin=dict(b=0, t=50) )
+    daily_data.update_layout(height=400, margin=dict(b=0, t=50) )
     #daily_data.update_xaxes(title_text="Date", title='Date', title_font=dict(family='Courier New, monospace', size=24, color='#7f7f7f'))
-
+    daily_data.update_layout(title = category +'  in France with ' + data)
 
     if (data == 'gdp'):
         df_data = df_GDP.copy(deep=True)
@@ -686,26 +686,28 @@ def daily_graph_gen_Fr(new_df, category, data):
             go.Scatter(x=df_data.index, y=df_data[13], name="GDP", line=dict(color='black')),
             secondary_y=True,
         )
+        daily_data.update_layout(title = category +'  in France with GDP')
     elif(data == 'stock'):
         #print(stock_DE.head())
         daily_data.add_trace(
             go.Scatter(x=stock_FR['Date'], y=stock_FR['Close'], name="CAC", line=dict(color='black')),
             secondary_y=True,
         )
+        daily_data.update_layout(title = category +'  in France with CAC')
     elif(data == 'unemp'):
         arbeitslosigkeit_FR_20 = arbeitslosigkeit_FR.iloc[-11:]
         daily_data.add_trace(
             go.Scatter(x=arbeitslosigkeit_FR_20['Date'], y=arbeitslosigkeit_FR_20['rel'], name="rel unemployment", line=dict(color='black')),
             secondary_y=True,
         )
-
+        daily_data.update_layout(title = category +'  in France with unemployment quota')
     elif(data == 'cons'):
         hc_FR_20 = hc_FR.iloc[-10:]
         daily_data.add_trace(
             go.Scatter(x=hc_FR_20['Date'], y=hc_FR_20['TotalConsumption'], name="consumption", line=dict(color='black')),
             secondary_y=True,
         )
-
+        daily_data.update_layout(title = category +'  in France with household consumption')
     height = new_df['coronavirus'].max()
     for index, row in measuresFrance.iterrows():
         date = row['Date']
@@ -747,25 +749,28 @@ def daily_graph_gen_De(new_df, category, data):
             go.Scatter(x=df_data.index, y=df_data[8], name="GDP", line=dict(color='black')),
             secondary_y=True,
         )
+        daily_data.update_layout(title = category +'  in Germany with GDP')
     elif(data == 'stock'):
         #print(stock_DE.head())
         daily_data.add_trace(
             go.Scatter(x=stock_DE['Date'], y=stock_DE['Close'], name="DAX", line=dict(color='black')),
             secondary_y=True,
         )
+        daily_data.update_layout(title = category +'  in Germany with DAX')
     elif(data == 'unemp'):
         arbeitslosigkeit_DE_20 = arbeitslosigkeit_DE.iloc[-12:]
         daily_data.add_trace(
             go.Scatter(x=arbeitslosigkeit_DE_20['Date'], y=arbeitslosigkeit_DE_20['rel'], name="rel unemployment", line=dict(color='black')),
             secondary_y=True,
         )
-
+        daily_data.update_layout(title = category +'  in Germany with unemployment quota')
     elif(data == 'cons'):
         hc_DE_20 = hc_DE.iloc[-3:]
         daily_data.add_trace(
             go.Scatter(x=hc_DE_20['Date'], y=hc_DE_20['VerbraucherAusgaben'], name="consumption", line=dict(color='black')),
             secondary_y=True,
         )
+        daily_data.update_layout(title = category +'  in Germany with household consumption')
     height = new_df['coronavirus'].max()
     for index, row in measuresGermany.iterrows():
         date = row['Date']
