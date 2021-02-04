@@ -431,7 +431,7 @@ app.layout = html.Div(children=[
                     html.Li("Unemployment rate is as well a good indicator on how the economy’s state. We believe it is a suitable addition to the previous two. In both countries is a strong mechanism to handle tough economical situations, called 'Kurzarbeit' and 'Activite partielle'. They have a huge impact on the unemployment rate. therefore we added them to the figure.", style={'margin-left':'30px'}),
                     html.Li("Similar to the GDP is the household consumption. If the households do not consume, the GDP drops.", style={'margin-left':'30px'}),
                     html.H4("Regional Level"),
-                    html.P("We thought it might be also interesting to discover similarities and dissimilarities on a smaller scale than on the national level. This is particularly interesting for Germany, where in some states are different restrictions against the spread of the virus, whereas in France which is centrally governed, there might be some interesting dissimilarities found between the metropolitan area and the rural areas. This is up to you to discover where we provide currently 3 regional factors:"),
+                    html.P("We thought it might be also interesting to discover similarities and dissimilarities on a smaller scale than on the national level. This is particularly interesting for Germany, where in some states are different restrictions against the spread of the virus, whereas in France which is centrally governed, there might be some interesting dissimilarities found between the metropolitan area and the rural areas. This is up to you to discover where we provide currently 3 regional factors. To choose your region of interest select it by clicking on the map."),
                     html.Li("Unemployment rate: Similarly, to the national level, the unemployment rate is of importance to understand a countries or regions economic health, whereas there might be some different levels in between the country", style={'margin-left':'30px'}),
                     html.Li("Related to this are business failures. The more businesses close, we expect a higher unemployment rate and vice versa. Here we speak of business closings, regardless of the reasons behind it. We wanted to show insolvencies but could not find the proper data for this on the French side.", style={'margin-left':'30px'}),
                     html.Li("In contrast to business failures it could be interesting to see how the foundations of business is in comparison and how they develop during the pandemic.", style={'margin-left':'30px'}),
@@ -515,18 +515,42 @@ app.layout = html.Div(children=[
            ], width=4, style={'display': 'inline-block'})
        ], align='center', className='text-center bg-light p-2', style = {'border-top-right-radius': '6px', 'border-bottom-right-radius': '6px'})
     ]),
-    end
-    # global map
-    #html.Div(children = [global_map_heading,
-    #    dcc.Graph(
-    #        id='global_graph',
-    #        figure=map_fig
-    #    )
-    #]),
+
+
+    html.Div(
+    [
+        dbc.Button("Learn about our sources",
+            id="open_end",),
+        dbc.Modal(
+            [
+                dbc.ModalHeader("Tools and resources:"),
+                dbc.ModalBody(children=[
+                    html.P("This Dashboard was made using Dash and plotly"),
+                    html.P("https://www.insee.fr statistical data for France"),
+                    html.P("https://github.com/CSSEGISandData/COVID-19 for national Corona Data"),
+                    html.P("https://github.com/kalisio/covid-19 for French Corona data"),
+                    html.P("https://de.statista.com for economical data"),
+                    html.P("https://fred.stlouisfed.org for monthly unemployment in France"),
+                    html.P("https://ec.europa.eu/eurostat for economical data"),
+                    html.P("yfinance for stock market data"),
+                    html.P("https://www-genesis.destatis.de for German economic data"),
+                    html.P("https://npgeo-corona-npgeo-de.hub.arcgis.com for german regional Corona data"),
+                    html.P("https://de.wikipedia.org/wiki/COVID-19-Pandemie_in_Deutschland#Situation_ab_Mai_2020 "),
+                    html.P("https://raw.githubusercontent.com/isellsoap/ for German map"),
+                    html.P("https://raw.githubusercontent.com/gregoiredavid for French map"),
 
 
 
 
+                ]),
+                dbc.ModalFooter(
+                    dbc.Button("Close", id="close_end", className="ml-auto")
+                ),
+            ],
+            id="modal_end", size="lg", centered=True,
+        ),
+    ],style={'marginTop': 50}
+    ),
 
 
 ], style={'marginBottom': 50, 'marginTop': 25, 'marginLeft': 20, 'marginRight' :20})
@@ -970,6 +994,14 @@ def country_wise(data, df_type):
 Output("modal", "is_open"),
 [Input("open", "n_clicks"), Input("close", "n_clicks")],
 [State("modal", "is_open")],)
+def toggle_modal(n1, n2, is_open):
+    if n1 or n2:
+        return not is_open
+    return is_open
+@app.callback(
+Output("modal_end", "is_open"),
+[Input("open_end", "n_clicks"), Input("close_end", "n_clicks")],
+[State("modal_end", "is_open")],)
 def toggle_modal(n1, n2, is_open):
     if n1 or n2:
         return not is_open
