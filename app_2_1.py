@@ -325,6 +325,62 @@ country_dropdown_De =dbc.Container(
 )
 
 
+state_dropdown_De =dbc.Container(
+    [
+    dbc.Row(
+            [
+                dbc.Col(children = [
+                    html.Label('Select Feature'),
+                    html.Div(
+                        dcc.Dropdown(
+                            id='selDatDE',
+                            options=[
+                                {'label': 'unemployment', 'value': 'unemp'},
+                                {'label': 'business failures', 'value': 'bf'},
+                                {'label': 'business birth', 'value': 'fe'}
+                                    ],
+                                value='unemp'
+                        ), style={'margin': "0px", "padding": "0px"}
+                    )
+                ],width=4, className='p-2 mr-2'),
+
+
+
+            ]
+        , className='my-4 justify-content-center')
+], style={'margin':'0px', 'height': '80px', 'padding':'0px'}
+)
+state_dropdown_Fr =dbc.Container(
+    [
+    dbc.Row(
+            [
+                dbc.Col(children = [
+                    html.Label('Select Feature'),
+                    html.Div(
+                        dcc.Dropdown(
+                            id='selDatFR',
+                            options=[
+                                {'label': 'unemployment', 'value': 'unemp'},
+                                {'label': 'business failures', 'value': 'bf'},
+                                {'label': 'business birth', 'value': 'fe'}
+                                    ],
+                                value='unemp',
+                                style = dict(
+
+
+
+                            )
+                        ), style={'margin': "0px", "padding": "0px"}
+                    )
+                ],width=4, className='p-2 mr-2'),
+
+
+
+            ]
+        , className='my-4 justify-content-center')
+], style={'margin':'0px', 'height': '80px', 'padding':'0px'}
+)
+
 
 
 # create graph for daily report
@@ -432,16 +488,7 @@ app.layout = html.Div(children=[
                 )
            ], width=2),
            dbc.Col(children = [
-               dcc.RadioItems(
-                   id='selDatFR',
-                   options=[
-                       {'label': 'unemployment', 'value': 'unemp'},
-                       {'label': 'business failures', 'value': 'bf'},
-                       {'label': 'business birth', 'value': 'fe'}
-                           ],
-                       value='unemp',
-                       labelStyle={'display': 'inline-block'}
-               ),
+               state_dropdown_Fr,
                dcc.Graph(id="coronaRegionFR",style={'width': '90%'})
            ], width=4, style={'display': 'inline-block'}),
 
@@ -458,16 +505,7 @@ app.layout = html.Div(children=[
                 #dcc.Graph(id="coronaRegionDE")
            ], width=2, style={'vertical-align': 'bottom'}),
            dbc.Col(children = [
-               dcc.RadioItems(
-                   id='selDatDE',
-                   options=[
-                       {'label': 'unemployment', 'value': 'unemp'},
-                       {'label': 'business failures', 'value': 'bf'},
-                       {'label': 'business birth', 'value': 'fe'}
-                           ],
-                       value='unemp',
-                       labelStyle={'display': 'inline-block'}
-               ),
+               state_dropdown_De,
                dcc.Graph(id="coronaRegionDE", style={'width': '90%'})
 
            ], width=4, style={'display': 'inline-block'})
@@ -526,7 +564,7 @@ def display_corona_cases(feature, value):
                 title_text="unemployment in percent",
                 secondary_y=True)
         elif (value == "bf"):
-            
+
             selectedStateBF = businessFail_DE[businessFail_DE["Bundesland"]==curState_raw]
 
             selectedStateBF = selectedStateBF.drop(selectedStateBF.index[:-24])
