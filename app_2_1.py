@@ -270,7 +270,7 @@ country_dropdown_Fr = dbc.Container(
                 ],width=3, className='p-2 mr-2'),
 
 
-                dbc.Col(children = [html.Label('Select Corona Indicator', style = {'padding-top': '0px'}),
+                dbc.Col(children = [html.Label('Select Indicator', style = {'padding-top': '0px'}),
                         html.Div(dcc.Dropdown(id = 'select-category-Fr', options = my_df_type_list, value='Confirmed cases'))],
                         width=3, className='p-2 ml-2'),
             ]
@@ -302,7 +302,7 @@ country_dropdown_De =dbc.Container(
 
 
 
-                dbc.Col(children = [html.Label('Select Corona Indicator', style = {'padding-top': '0px'}),
+                dbc.Col(children = [html.Label('Select Indicator', style = {'padding-top': '0px'}),
                         html.Div(dcc.Dropdown(id = 'select-category-De', options = my_df_type_list, value='Confirmed cases'))],
                         width=3, className='p-2 ml-2'),
             ]
@@ -382,34 +382,7 @@ end = html.Div(children= [
         html.H5('Note: Will be updating this Dashboard with more features and better visualization.', style = {'margin-top': '20px', 'margin-bottom': '140px'})
 ])
 
-#barchart of unemployment and reduced working hours in Germany and France
-unempBarFig = go.Figure(
-    data=[
-        go.Bar(
-            name="Unemployment France",
-            x=arbeitslosigkeit_FR["Date"],
-            y=arbeitslosigkeit_FR["rel"],
-            offsetgroup=0,
-        ),
-        go.Bar(
-            name="Unemployment Germany",
-            x=arbeitslosigkeit_DE["Date"],
-            y=arbeitslosigkeit_DE["rel"],
-            offsetgroup=1,
-        ),
-        go.Bar(
-            name="Kurzarbeit Germany",
-            x=kurzarbeitDE["date"],
-            y=kurzarbeitDE["rel"],
-            offsetgroup=1,
-            base=arbeitslosigkeit_DE["rel"],
-        )
-    ],
-    layout=go.Layout(
-        title="Unemploymentand Kurzarbeit in Germany and France",
-        yaxis_title="Percentage of unemployment"
-    )
-)
+
 
 # ploting world map
 # fixing the size of circle to plot in the map
@@ -440,7 +413,7 @@ app.layout = html.Div(children=[
                     dcc.Graph(id='daily-graphs-Fr')
                 ])
                 #, style={"height": '40vh'}
-            ], width=6, style={'display': 'inline-block'}),
+            ], width=6, className='text-center bg-light p-2', style = {'border-top-right-radius': '6px', 'border-bottom-right-radius': '6px'}),
             dbc.Col([
                 # daily report graph
 
@@ -450,7 +423,7 @@ app.layout = html.Div(children=[
                     ##########
                     dcc.Graph(id='daily-graphs-De')
 
-            ], width=6, style={'display': 'inline-block', 'margin':'0px'})
+            ], width=6, className='text-center bg-light p-2', style = {'border-top-right-radius': '6px', 'border-bottom-right-radius': '6px'})
 
 
         ],style={ 'margin':'0px'})
@@ -462,7 +435,7 @@ app.layout = html.Div(children=[
     html.Div([
         dbc.Row([
            dbc.Col(children = [
-
+                html.Label('data for the regional level in France'),
                 dl.Map(center=[47, 2], zoom=4, children=[
                    dl.TileLayer(),
                    #dl.GeoJSON(url='https://raw.githubusercontent.com/isellsoap/deutschlandGeoJSON/master/2_bundeslaender/4_niedrig.geo.json', id="capitals",
@@ -479,7 +452,7 @@ app.layout = html.Div(children=[
            ], width=4, style={'display': 'inline-block'}),
 
            dbc.Col(children=[
-
+                html.Label('Data for the regional level in Germany. '),
                 dl.Map(center=[51, 10], zoom=5, children=[
                    dl.TileLayer(),
                    dl.GeoJSON(data = mapgermany, id="laender_DE",
@@ -495,7 +468,7 @@ app.layout = html.Div(children=[
                dcc.Graph(id="coronaRegionDE", style={'width': '90%'})
 
            ], width=4, style={'display': 'inline-block'})
-       ], align='center')
+       ], align='center', className='text-center bg-light p-2', style = {'border-top-right-radius': '6px', 'border-bottom-right-radius': '6px'})
     ]),
 
     # global map
@@ -644,7 +617,7 @@ def capital_click(feature, value):
         elif (value == "fe"):
             selectedStateFE = bb_FR.iloc[:4]
             fig_coronaRegionFR.add_trace(
-                go.Scatter(x=selectedStateFE["Date"], y= selectedStateFE[curState], name="business birts", line=dict(color='black')),
+                go.Scatter(x=selectedStateFE["Date"], y= selectedStateFE[curState], name="business births", line=dict(color='black')),
                 secondary_y=True,
             )
 
@@ -697,7 +670,7 @@ def daily_graph_gen_Fr(new_df, category, data):
     new_df = new_df[:334]
     daily_data = make_subplots(specs=[[{"secondary_y": True}]])
     daily_data.add_trace(
-        go.Scatter(x=new_df['Date'], y=new_df['coronavirus'], name="Covid-19 daily report", line=dict(color='#f36')),
+        go.Scatter(x=new_df['Date'], y=new_df['coronavirus'], name="Covid-19 weekly infections", line=dict(color='#f36')),
         secondary_y=False,
     )
     daily_data.update_layout(height=400,  title = category +'  in France with ' + data, margin=dict(b=0, t=50) )
@@ -740,7 +713,13 @@ def daily_graph_gen_Fr(new_df, category, data):
 
         daily_data.add_trace(go.Scatter(x=[date, date], y=[-1,height], mode="lines", line_color = "black", opacity=0.2,showlegend=False, hoverinfo = "text", text = measure))
 
-
+    daily_data.update_layout(legend=dict(
+        orientation="h",
+        yanchor="bottom",
+        y=1.02,
+        xanchor="right",
+        x=1
+    ))
 
 
 
@@ -753,7 +732,7 @@ def daily_graph_gen_De(new_df, category, data):
     new_df = new_df[:334]
 
     daily_data.add_trace(
-        go.Scatter(x=new_df['Date'], y=new_df['coronavirus'], name="Covid-19 daily report", line=dict(color='#f36')),
+        go.Scatter(x=new_df['Date'], y=new_df['coronavirus'], name="Covid-19 weekly infections", line=dict(color='#f36')),
         secondary_y=False,
     )
     daily_data.update_layout(height=400,  title = category +'  in Germany with ' + data, margin=dict(b=0, t=50))
@@ -791,7 +770,15 @@ def daily_graph_gen_De(new_df, category, data):
     for index, row in measuresGermany.iterrows():
         date = row['Date']
         measure = row['Measures']
-        daily_data.add_trace(go.Scatter(x=[date, date], y=[-1,height], mode="lines", line_color = "black", opacity=0.2,showlegend=False, hoverinfo = "text", text = measure))
+        daily_data.add_trace(go.Scatter(x=[date, date], y=[-1,height], mode="lines", line_color = "black", opacity=0.2, showlegend=False, hoverinfo = "text", text = measure))
+
+    daily_data.update_layout(legend=dict(
+        orientation="h",
+        yanchor="bottom",
+        y=1.02,
+        xanchor="right",
+        x=1
+    ))
 
     return daily_data
 
