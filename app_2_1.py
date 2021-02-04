@@ -79,6 +79,7 @@ bb_DE = pd.read_csv("data/BusinessBirths_Regionin_DE.csv", sep=",", encoding = "
 
 #measuresFrance
 measuresFrance = pd.read_csv("data/measuresFreance.CSV", sep=";", encoding = "ISO-8859-1")
+measuresGermany = pd.read_csv("data/measures_DE.CSV", sep=";", encoding = "ISO-8859-1")
 
 
 def transfromDateFormat(df_us):
@@ -648,10 +649,6 @@ def capital_click(feature, value):
             )
 
 
-        for index, row in measuresFrance.iterrows():
-            date = row['Date']
-            measure = row['Measures']
-            fig_coronaRegionFR.add_trace(go.Scatter(x=[date, date], y=[-1,30000], mode="lines", line_color = "black", opacity=0.1,showlegend=False, hoverinfo = "text", text = measure))
 
         #fig_coronaRegionFR.update_layout(hovermode='x')
 
@@ -736,6 +733,11 @@ def daily_graph_gen_Fr(new_df, category, data):
             secondary_y=True,
         )
 
+    for index, row in measuresFrance.iterrows():
+        date = row['Date']
+        measure = row['Measures']
+        daily_data.add_trace(go.Scatter(x=[date, date], y=[-1,110000], mode="lines", line_color = "black", opacity=0.2,showlegend=False, hoverinfo = "text", text = measure))
+
 
 
 
@@ -783,6 +785,11 @@ def daily_graph_gen_De(new_df, category, data):
             go.Scatter(x=hc_DE_20['Date'], y=hc_DE_20['VerbraucherAusgaben'], name="consumption", line=dict(color='black')),
             secondary_y=True,
         )
+
+    for index, row in measuresGermany.iterrows():
+        date = row['Date']
+        measure = row['Measures']
+        daily_data.add_trace(go.Scatter(x=[date, date], y=[-1,35000], mode="lines", line_color = "black", opacity=0.2,showlegend=False, hoverinfo = "text", text = measure))
 
     return daily_data
 
