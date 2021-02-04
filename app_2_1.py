@@ -700,7 +700,7 @@ def daily_graph_gen_Fr(new_df, category, data):
         go.Scatter(x=new_df['Date'], y=new_df['coronavirus'], name="Covid-19 daily report", line=dict(color='#f36')),
         secondary_y=False,
     )
-    daily_data.update_layout(height=400,  title = category +'  in ' + new_df['Country'].values[0] + ' and ' + data, margin=dict(b=0, t=50) )
+    daily_data.update_layout(height=400,  title = category +'  in France with ' + data, margin=dict(b=0, t=50) )
     #daily_data.update_xaxes(title_text="Date", title='Date', title_font=dict(family='Courier New, monospace', size=24, color='#7f7f7f'))
 
 
@@ -736,7 +736,7 @@ def daily_graph_gen_Fr(new_df, category, data):
     for index, row in measuresFrance.iterrows():
         date = row['Date']
         measure = row['Measures']
-        daily_data.add_trace(go.Scatter(x=[date, date], y=[-1,110000], mode="lines", line_color = "black", opacity=0.2,showlegend=False, hoverinfo = "text", text = measure))
+        daily_data.add_trace(go.Scatter(x=[date, date], y=[-1,422000], mode="lines", line_color = "black", opacity=0.2,showlegend=False, hoverinfo = "text", text = measure))
 
 
 
@@ -754,7 +754,7 @@ def daily_graph_gen_De(new_df, category, data):
         go.Scatter(x=new_df['Date'], y=new_df['coronavirus'], name="Covid-19 daily report", line=dict(color='#f36')),
         secondary_y=False,
     )
-    daily_data.update_layout(height=400,  title = category +'  in ' + new_df['Country'].values[0] + ' and ' + data, margin=dict(b=0, t=50))
+    daily_data.update_layout(height=400,  title = category +'  in Germany with ' + data, margin=dict(b=0, t=50))
     #daily_data.update_xaxes(title_text="Date", title='Date', title_font=dict(family='Courier New, monospace', size=24, color='#7f7f7f'))
 
     if (data == 'gdp'):
@@ -789,7 +789,7 @@ def daily_graph_gen_De(new_df, category, data):
     for index, row in measuresGermany.iterrows():
         date = row['Date']
         measure = row['Measures']
-        daily_data.add_trace(go.Scatter(x=[date, date], y=[-1,35000], mode="lines", line_color = "black", opacity=0.2,showlegend=False, hoverinfo = "text", text = measure))
+        daily_data.add_trace(go.Scatter(x=[date, date], y=[-1,160000], mode="lines", line_color = "black", opacity=0.2,showlegend=False, hoverinfo = "text", text = measure))
 
     return daily_data
 
@@ -844,6 +844,8 @@ def country_wise(data, df_type):
             new_df.iloc[i+1, 1] = 0
 
 
+    new_df['Date'] = new_df['Date'].astype('datetime64[ns]')
+    new_df = new_df.resample('W-SUN', label='left', on = 'Date').sum().reset_index()
 
     #new_df = new_df.iloc[-number:]
     return (daily_graph_gen_De(new_df, category, data))
@@ -907,6 +909,8 @@ def country_wise(data, df_type):
             new_df.iloc[i+1, 1] = 0
 
     #new_df = new_df.iloc[-number:]
+    new_df['Date'] = new_df['Date'].astype('datetime64[ns]')
+    new_df = new_df.resample('W-SUN', label='left', on = 'Date').sum().reset_index()
 
 
     return (daily_graph_gen_Fr(new_df, category, data))
