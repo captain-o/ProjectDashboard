@@ -42,27 +42,27 @@ arbeitslosigkeit_DE = pd.read_csv("data/unemployment_Ger_rel.csv", sep=";", enco
 #plot unemployment and corona in german unemplStates
 corona_Ger_state_d = pd.read_csv("data/CoronaCasesPerBL_Weekly.csv", sep=",", encoding = "ISO-8859-1")
 unemp_Ger_state_m = pd.read_csv("data/unempGerStates_monthly.CSV", sep=";", encoding = "ISO-8859-1")
-#print(corona_Ger_state_d.head())
-#print(unemp_Ger_state_m.head())
+
+unemp_kurzar_DE = pd.read_csv("data/unemp_Kurzarb_DE.CSV", sep=";", encoding = "ISO-8859-1")
 
 #plot unemployment and corona in french regions
 corona_fr_dep_d = pd.read_csv("data/CoronaCasesParRegion_Weekly.csv", sep=",", encoding = "ISO-8859-1")
-#with open("data/CoronaCasesParRegion_Weekly.csv", 'rb') as file:
-#    print(chardet.detect(file.read()))
-#print(corona_fr_dep_d.head())
+
 unemp_Fr_state_q = pd.read_csv("data/UnemploymentRegionFR_quarterly.csv", sep=";", encoding='utf-8')
-#with open("data/UnemploymentRegionFR_quarterly.csv", 'rb') as file:
-#    print(chardet.detect(file.read()))
+emppart_Fr_state_q = pd.read_csv("data/activitepartielleFrance_rel.CSV", sep=";", encoding="ISO-8859-1")
+
+
+#unemp_Fr_state_q = unemp_Fr_state_q.drop(unemp_Fr_state_q.index[:-8])
 unemp_Fr_state_q = unemp_Fr_state_q.drop(unemp_Fr_state_q.index[:-8])
-#print(unemp_Fr_state_q.head())
+
 
 #business failures
 businessFail_FR = pd.read_csv("data/BusinessFailuresRegion_FR.csv", sep=";", encoding = "utf-8")
-#with open("data/BusinessFailuresRegion_FR.csv", 'rb') as file:
-#    print(chardet.detect(file.read()))
 businessFail_FR = businessFail_FR.drop(businessFail_FR.index[:-24])
 businessFail_DE = pd.read_csv("data/BusinessFailureLaender_DE.csv", sep=",", encoding = "ISO-8859-1")
-#print(businessFail_DE)
+businessB_F_DE = pd.read_csv("data/BusinessBirth_Failure_DE.csv", sep=",", encoding = "ISO-8859-1")
+
+
 
 #stock Market
 stock_FR = pd.read_csv("data/Stock_Fr.csv", sep=";")
@@ -524,18 +524,19 @@ def display_corona_cases(feature, value):
                 secondary_y=True)
         elif (value == "bf"):
 
-            selectedStateBF = businessFail_DE[businessFail_DE["Bundesland"]==curState_raw]
+            selectedStateBF = businessB_F_DE[businessB_F_DE["Bundesland"]==curState_raw]
 
             selectedStateBF = selectedStateBF.drop(selectedStateBF.index[:-24])
             fig_region_DE.add_trace(
-                go.Scatter(x=selectedStateBF["date"], y= selectedStateBF['SumOfBankrupcies'], name="business failures", line=dict(color='black')),
+                go.Scatter(x=selectedStateBF["Date"], y= selectedStateBF['NumberOfBusinessClosings'], name="business failures", line=dict(color='black')),
                 secondary_y=True,
             )
             fig_region_DE.update_yaxes(
                 title_text="absolut buseiness failures",
                 secondary_y=True)
         elif (value == "fe"):
-            selectedStateFE = bb_DE[bb_DE["Bundesland"]==curState_raw]
+            selectedStateFE = businessB_F_DE[businessB_F_DE["Bundesland"]==curState_raw]
+
             fig_region_DE.add_trace(
                 go.Scatter(x=selectedStateFE["Date"], y= selectedStateFE['NumberofCompanyBirths'], name="business birts", line=dict(color='black')),
                 secondary_y=True,
@@ -700,6 +701,12 @@ def daily_graph_gen_Fr(new_df, category, data):
             go.Scatter(x=arbeitslosigkeit_FR_20['Date'], y=arbeitslosigkeit_FR_20['rel'], name="rel unemployment", line=dict(color='black')),
             secondary_y=True,
         )
+        kurzarbeit_FR_20 = emppart_Fr_state_q.iloc[:4]
+        daily_data.add_trace(
+            go.Scatter(x=kurzarbeit_FR_20['Date'], y=kurzarbeit_FR_20['relPartielle']*100, name="rel reduced working", line=dict(color='green')),
+            secondary_y=True,
+        )
+
         daily_data.update_layout(title = category +'  in France with unemployment quota')
     elif(data == 'cons'):
         hc_FR_20 = hc_FR.iloc[-10:]
@@ -758,9 +765,14 @@ def daily_graph_gen_De(new_df, category, data):
         )
         daily_data.update_layout(title = category +'  in Germany with DAX')
     elif(data == 'unemp'):
-        arbeitslosigkeit_DE_20 = arbeitslosigkeit_DE.iloc[-12:]
+        #arbeitslosigkeit_DE_20 = arbeitslosigkeit_DE.iloc[-12:]
+        #unemp_kurzar_DE
         daily_data.add_trace(
-            go.Scatter(x=arbeitslosigkeit_DE_20['Date'], y=arbeitslosigkeit_DE_20['rel'], name="rel unemployment", line=dict(color='black')),
+            go.Scatter(x=unemp_kurzar_DE['Date'], y=unemp_kurzar_DE['relUnemp']*100, name="relative unemployment", line=dict(color='black')),
+            secondary_y=True,
+        )
+        daily_data.add_trace(
+            go.Scatter(x=unemp_kurzar_DE['Date'], y=unemp_kurzar_DE['relKruzarb']*100, name="relative unemployment", line=dict(color='green')),
             secondary_y=True,
         )
         daily_data.update_layout(title = category +'  in Germany with unemployment quota')
