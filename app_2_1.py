@@ -12,7 +12,7 @@ import plotly.express as px
 import pandas as pd
 import numpy as np
 import csv
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 from plotly.subplots import make_subplots
 from urllib.request import urlopen
 import json
@@ -261,8 +261,8 @@ country_dropdown_Fr = dbc.Container(
                             options=[
                                 {'label': 'CAC', 'value': 'stock'},
                                 {'label': 'GDP', 'value': 'gdp'},
-                                {'label': 'unemployment', 'value': 'unemp'},
-                                {'label': 'consumption', 'value': 'cons'}
+                                {'label': 'Unemployment', 'value': 'unemp'},
+                                {'label': 'Consumption', 'value': 'cons'}
                             ],
                             value='gdp'
                         ),
@@ -292,8 +292,8 @@ country_dropdown_De =dbc.Container(
                             options=[
                                 {'label': 'DAX', 'value': 'stock'},
                                 {'label': 'GDP', 'value': 'gdp'},
-                                {'label': 'unemployment', 'value': 'unemp'},
-                                {'label': 'consumption', 'value': 'cons'}
+                                {'label': 'Unemployment', 'value': 'unemp'},
+                                {'label': 'Consumption', 'value': 'cons'}
                             ],
                             value='gdp'
                         ), style={'margin': "0px", "padding": "0px"}
@@ -321,9 +321,9 @@ state_dropdown_De =dbc.Container(
                         dcc.Dropdown(
                             id='selDatDE',
                             options=[
-                                {'label': 'unemployment', 'value': 'unemp'},
-                                {'label': 'business failures', 'value': 'bf'},
-                                {'label': 'business birth', 'value': 'fe'}
+                                {'label': 'Unemployment', 'value': 'unemp'},
+                                {'label': 'Business failures', 'value': 'bf'},
+                                {'label': 'Business birth', 'value': 'fe'}
                                     ],
                                 value='unemp'
                         ), style={'margin': "0px", "padding": "0px"}
@@ -346,9 +346,9 @@ state_dropdown_Fr =dbc.Container(
                         dcc.Dropdown(
                             id='selDatFR',
                             options=[
-                                {'label': 'unemployment', 'value': 'unemp'},
-                                {'label': 'business failures', 'value': 'bf'},
-                                {'label': 'business birth', 'value': 'fe'}
+                                {'label': 'Unemployment', 'value': 'unemp'},
+                                {'label': 'Business failures', 'value': 'bf'},
+                                {'label': 'Business birth', 'value': 'fe'}
                                     ],
                                 value='unemp',
                                 style = dict(
@@ -399,6 +399,35 @@ app.layout = html.Div(children=[
     #what_is_covid,
     ############
     world_tally,
+    html.Div(
+    [
+        dbc.Button("Impact of Covid-19 measures on the economy of France and Germany. Our dashboard shows a different data sets that can be chosen and compared to covid cases. For further information click here.",
+            id="open"),
+        dbc.Modal(
+            [
+                dbc.ModalHeader("About this dashboard"),
+                dbc.ModalBody(children=[
+                    html.P("Impact of Covid-19 measures on the economy of France and Germany. Our dashboard shows a different data sets that can be chosen and compared to covid cases. For further information click here."),
+                    html.H4("National Level"),
+                    html.P("Here we have a portfolio of indicators that we believe are linked to the pandemic."),
+                    html.Li("Stock market. The stock market reacts on all kind of information and thus consider the outbreak of the pandemic as well. We show the stock market from the beginning of march, when the pandemic developed to a hot topic.", style={'margin-left':'30px'}),
+                    html.Li("GDP. The change in gross domestic product of a country is as a good indicator of the health of an economy", style={'margin-left':'30px'}),
+                    html.Li("Unemployment rate is as well a good indicator on how the economy’s state. We believe it is a suitable addition to the previous two. In both countries is a strong mechanism to handle tough economical situations, called 'Kurzarbeit' and 'Activite partielle'. They have a huge impact on the unemployment rate. therefore we added them to the figure.", style={'margin-left':'30px'}),
+                    html.Li("Similar to the GDP is the household consumption. If the households do not consume, the GDP drops.", style={'margin-left':'30px'}),
+                    html.H4("Regional Level"),
+                    html.P("We thought it might be also interesting to discover similarities and dissimilarities on a smaller scale than on the national level. This is particularly interesting for Germany, where in some states are different restrictions against the spread of the virus, whereas in France which is centrally governed, there might be some interesting dissimilarities found between the metropolitan area and the rural areas. This is up to you to discover where we provide currently 3 regional factors:"),
+                    html.Li("Unemployment rate: Similarly, to the national level, the unemployment rate is of importance to understand a countries or regions economic health, whereas there might be some different levels in between the country", style={'margin-left':'30px'}),
+                    html.Li("Related to this are business failures. The more businesses close, we expect a higher unemployment rate and vice versa. Here we speak of business closings, regardless of the reasons behind it. We wanted to show insolvencies but could not find the proper data for this on the French side.", style={'margin-left':'30px'}),
+                    html.Li("In contrast to business failures it could be interesting to see how the foundations of business is in comparison and how they develop during the pandemic.", style={'margin-left':'30px'}),
+                ]),
+                dbc.ModalFooter(
+                    dbc.Button("Close", id="close", className="ml-auto")
+                ),
+            ],
+            id="modal", size="lg",
+        ),
+    ]
+    ),
 
 
     html.Div([
@@ -435,7 +464,7 @@ app.layout = html.Div(children=[
     html.Div([
         dbc.Row([
            dbc.Col(children = [
-                html.Label('data for the regional level in France'),
+                html.Label('Data for the regional level in France'),
                 dl.Map(center=[47, 2], zoom=4, children=[
                    dl.TileLayer(),
                    #dl.GeoJSON(url='https://raw.githubusercontent.com/isellsoap/deutschlandGeoJSON/master/2_bundeslaender/4_niedrig.geo.json', id="capitals",
@@ -768,11 +797,11 @@ def daily_graph_gen_De(new_df, category, data):
         #arbeitslosigkeit_DE_20 = arbeitslosigkeit_DE.iloc[-12:]
         #unemp_kurzar_DE
         daily_data.add_trace(
-            go.Scatter(x=unemp_kurzar_DE['Date'], y=unemp_kurzar_DE['relUnemp']*100, name="relative unemployment", line=dict(color='black')),
+            go.Scatter(x=unemp_kurzar_DE['Date'], y=unemp_kurzar_DE['relUnemp']*100, name="rel unemployment", line=dict(color='black')),
             secondary_y=True,
         )
         daily_data.add_trace(
-            go.Scatter(x=unemp_kurzar_DE['Date'], y=unemp_kurzar_DE['relKruzarb']*100, name="relative unemployment", line=dict(color='green')),
+            go.Scatter(x=unemp_kurzar_DE['Date'], y=unemp_kurzar_DE['relKruzarb']*100, name="rel reduced working", line=dict(color='green')),
             secondary_y=True,
         )
         daily_data.update_layout(title = category +'  in Germany with unemployment quota')
@@ -920,6 +949,15 @@ def country_wise(data, df_type):
 
 
     return (daily_graph_gen_Fr(new_df, category, data))
+
+@app.callback(
+Output("modal", "is_open"),
+[Input("open", "n_clicks"), Input("close", "n_clicks")],
+[State("modal", "is_open")],)
+def toggle_modal(n1, n2, is_open):
+    if n1 or n2:
+        return not is_open
+    return is_open
 
 if __name__ == '__main__':
     app.run_server(debug=True)
