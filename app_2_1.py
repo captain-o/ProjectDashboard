@@ -259,19 +259,27 @@ country_dropdown_Fr = dbc.Container(
                         dcc.Dropdown(
                             id = 'select-data-Fr',
                             options=[
-                                {'label': 'CAC', 'value': 'stock'},
-                                {'label': 'GDP', 'value': 'gdp'},
-                                {'label': 'Unemployment', 'value': 'unemp'},
-                                {'label': 'Consumption', 'value': 'cons'}
+                                {'label': 'CAC', 'value': 'stock', 'title':'daily closing value of CAC'},
+                                {'label': 'GDP', 'value': 'gdp', 'title':'quarterly GDP'},
+                                {'label': 'Unemployment', 'value': 'unemp', 'title':'monthly unemployment in percent and percentage of employees involuntarily working reduced hours'},
+                                {'label': 'Consumption', 'value': 'cons', 'title':'monthly absolut houeshold consumption'},
                             ],
-                            value='gdp'
+                            value='gdp',
+
                         ),
                     )
                 ],width=3, className='p-2 mr-2'),
 
 
                 dbc.Col(children = [html.Label('Select Indicator', style = {'padding-top': '0px'}),
-                        html.Div(dcc.Dropdown(id = 'select-category-Fr', options = my_df_type_list, value='Confirmed cases'))],
+                        html.Div(
+                            dcc.Dropdown(
+                                id = 'select-category-Fr',
+                                options = [
+                                {'label':'Confirmed cases', 'value':'Confirmed cases', 'title':'number of newly infected persons during previos seven days'},
+                                {'label':'Death cases', 'value':'Death cases', 'title':'number of deaths during previos seven days'},
+                                ],
+                                value='Confirmed cases'))],
                         width=3, className='p-2 ml-2'),
             ]
         , className='my-4 justify-content-center'),
@@ -290,10 +298,10 @@ country_dropdown_De =dbc.Container(
                         dcc.Dropdown(
                             id = 'select-data-De',
                             options=[
-                                {'label': 'DAX', 'value': 'stock'},
-                                {'label': 'GDP', 'value': 'gdp'},
-                                {'label': 'Unemployment', 'value': 'unemp'},
-                                {'label': 'Consumption', 'value': 'cons'}
+                                {'label': 'DAX', 'value': 'stock', 'title':'daily closing value of DAX'},
+                                {'label': 'GDP', 'value': 'gdp', 'title':'quarterly GDP'},
+                                {'label': 'Unemployment', 'value': 'unemp', 'title':'monthly unemployment in percent and percentage of employees involuntarily working reduced hours'},
+                                {'label': 'Consumption', 'value': 'cons', 'title':'monthly absolut houeshold consumption'}
                             ],
                             value='gdp'
                         ), style={'margin': "0px", "padding": "0px"}
@@ -302,8 +310,16 @@ country_dropdown_De =dbc.Container(
 
 
 
-                dbc.Col(children = [html.Label('Select Indicator', style = {'padding-top': '0px'}),
-                        html.Div(dcc.Dropdown(id = 'select-category-De', options = my_df_type_list, value='Confirmed cases'))],
+                dbc.Col(children = [
+                    html.Label('Select Indicator', style = {'padding-top': '0px'}),
+                        html.Div(
+                            dcc.Dropdown(
+                                id = 'select-category-De',
+                                options = [
+                                    {'label':'Confirmed cases', 'value':'Confirmed cases', 'title':'number of newly infected persons during previos seven days'},
+                                    {'label':'Death cases', 'value':'Death cases', 'title':'number of deaths during previos seven days'},
+                                ],
+                                value='Confirmed cases'))],
                         width=3, className='p-2 ml-2'),
             ]
         , className='my-4 justify-content-center')
@@ -321,9 +337,9 @@ state_dropdown_De =dbc.Container(
                         dcc.Dropdown(
                             id='selDatDE',
                             options=[
-                                {'label': 'Unemployment', 'value': 'unemp'},
-                                {'label': 'Business failures', 'value': 'bf'},
-                                {'label': 'Business birth', 'value': 'fe'}
+                                {'label': 'Unemployment', 'value': 'unemp', 'title':'empty'},
+                                {'label': 'Business failures', 'value': 'bf', 'title':'empty'},
+                                {'label': 'Business birth', 'value': 'fe', 'title':'empty'}
                                     ],
                                 value='unemp'
                         ), style={'margin': "0px", "padding": "0px"}
@@ -346,9 +362,9 @@ state_dropdown_Fr =dbc.Container(
                         dcc.Dropdown(
                             id='selDatFR',
                             options=[
-                                {'label': 'Unemployment', 'value': 'unemp'},
-                                {'label': 'Business failures', 'value': 'bf'},
-                                {'label': 'Business birth', 'value': 'fe'}
+                                {'label': 'Unemployment', 'value': 'unemp', 'title':'empty'},
+                                {'label': 'Business failures', 'value': 'bf', 'title':'empty'},
+                                {'label': 'Business birth', 'value': 'fe', 'title':'empty'}
                                     ],
                                 value='unemp',
                                 style = dict(
