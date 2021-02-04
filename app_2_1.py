@@ -735,9 +735,9 @@ def capital_click(feature, value):
 
 def daily_graph_gen_Fr(new_df, category, data):
 
-    #print(new_df.loc[new_df['Date']== "2020-12-31"])
+    #print(new_df.loc[new_df['Date']== "2020-12-27"])
     #cut data after 31.12.2020
-    new_df = new_df[:334]
+    new_df = new_df[:50]
     daily_data = make_subplots(specs=[[{"secondary_y": True}]])
     daily_data.add_trace(
         go.Scatter(x=new_df['Date'], y=new_df['coronavirus'], name="Covid-19 weekly infections", line=dict(color='#f36')),
@@ -807,7 +807,8 @@ def daily_graph_gen_Fr(new_df, category, data):
 def daily_graph_gen_De(new_df, category, data):
     daily_data = make_subplots(specs=[[{"secondary_y": True}]])
     #cut data after 31.12.2020
-    new_df = new_df[:334]
+    new_df = new_df[:50]
+    #print(new_df.head(60))
 
     daily_data.add_trace(
         go.Scatter(x=new_df['Date'], y=new_df['coronavirus'], name="Covid-19 weekly infections", line=dict(color='#f36')),
