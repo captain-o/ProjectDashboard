@@ -733,10 +733,12 @@ def daily_graph_gen_Fr(new_df, category, data):
             secondary_y=True,
         )
 
+    height = new_df['coronavirus'].max()
     for index, row in measuresFrance.iterrows():
         date = row['Date']
         measure = row['Measures']
-        daily_data.add_trace(go.Scatter(x=[date, date], y=[-1,422000], mode="lines", line_color = "black", opacity=0.2,showlegend=False, hoverinfo = "text", text = measure))
+
+        daily_data.add_trace(go.Scatter(x=[date, date], y=[-1,height], mode="lines", line_color = "black", opacity=0.2,showlegend=False, hoverinfo = "text", text = measure))
 
 
 
@@ -785,11 +787,11 @@ def daily_graph_gen_De(new_df, category, data):
             go.Scatter(x=hc_DE_20['Date'], y=hc_DE_20['VerbraucherAusgaben'], name="consumption", line=dict(color='black')),
             secondary_y=True,
         )
-
+    height = new_df['coronavirus'].max()
     for index, row in measuresGermany.iterrows():
         date = row['Date']
         measure = row['Measures']
-        daily_data.add_trace(go.Scatter(x=[date, date], y=[-1,160000], mode="lines", line_color = "black", opacity=0.2,showlegend=False, hoverinfo = "text", text = measure))
+        daily_data.add_trace(go.Scatter(x=[date, date], y=[-1,height], mode="lines", line_color = "black", opacity=0.2,showlegend=False, hoverinfo = "text", text = measure))
 
     return daily_data
 
